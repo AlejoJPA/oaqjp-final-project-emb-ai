@@ -1,4 +1,4 @@
-'''This app performs emotion detection from text 
+'''This app performs emotion detection from text
     using the Watson NLP library
 '''
 import json
@@ -24,11 +24,8 @@ def emotion_detector(text_to_analyze):
 
         #Parsed JSON response
         formatted_response= json.loads(response.text)
-    
+
     except requests.exceptions.RequestException as e:
         print(f"Request error: {e}") # Error log
-    
+
     return formatted_response
-
-
-
