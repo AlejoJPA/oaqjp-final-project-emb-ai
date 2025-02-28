@@ -31,7 +31,7 @@ def emotion_analyzer():
 
     # Check if the label is None, indicating an error or invalid input
     if None in (anger, disgust, fear, joy, sadness, dominant_emotion):
-        return {"error": "Emotion detection failed. Try again with different input."}, 500
+        return {"error": "Emotion detection failed. Please try again with different input."}, 500
 
     # Return a formatted string with the sentiment label and score
     return {
