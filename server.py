@@ -8,7 +8,7 @@ from EmotionDetection.emotion_detection import emotion_detector
 #Initiate the flask app
 app = Flask(__name__)
 @app.route("/emotionDetector")
-def sent_analyzer():
+def emotion_analyzer():
     ''' This code receives the text from the HTML interface and
         runs emotion over it using emotion_detector()
         function. The output returned shows the labels and their emorion score
