@@ -18,7 +18,7 @@ def emotion_detector(text_to_analyze):
     #Headers required for the API request
     header = { "grpc-metadata-mm-model-id": "emotion_aggregated-workflow_lang_en_stock" }
 
-    # Initializin default values
+    # Initializing default values
     anger_score = None
     disgust_score = None
     fear_score = None

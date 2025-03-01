@@ -21,6 +21,22 @@ def emotion_analyzer():
     # Pass the text to the emotion_detector function and store the response
     response = emotion_detector(text_to_analyze)
 
+    # Error handling:
+    # case where response.status_code == 400 (Bad Request) and 'dominant_emotion' is None
+    '''if response.get("status_code") == 400 or response.get("dominant_emotion") is None:
+        return {
+            "anger": None,
+            "disgust": None,
+            "fear": None,
+            "joy": None,
+            "sadness": None,
+            "dominant_emotion": None,
+            "error": "Invalid text! Please try again!"
+        }, 400'''
+
+    if not response or response.get("dominant_emotion") is None:
+        return {"error": "Invalid text! Please try again!"}, 400
+
     # Extract the label and score from the response
     anger = response.get('anger')
     disgust = response.get('disgust')
@@ -28,10 +44,6 @@ def emotion_analyzer():
     joy = response.get('joy')
     sadness = response.get('sadness')
     dominant_emotion = response.get('dominant_emotion')
-
-    # Check if the label is None, indicating an error or invalid input
-    if None in (anger, disgust, fear, joy, sadness, dominant_emotion):
-        return {"error": "Emotion detection failed. Please try again with different input."}, 500
 
     # Return a formatted string with the sentiment label and score
     return (f"For the given statement, the system response is:\n"
