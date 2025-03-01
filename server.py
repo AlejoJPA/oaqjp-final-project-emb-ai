@@ -2,40 +2,30 @@
     The application will be deployed on localhost:5000.
 '''
 
-from flask import  Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from EmotionDetection.emotion_detection import emotion_detector
 
-#Initiate the flask app
+# Initiate the Flask app
 app = Flask(__name__)
+
 @app.route("/emotionDetector")
 def emotion_analyzer():
-    ''' This code receives the text from the HTML interface and
-        runs emotion over it using emotion_detector()
-        function. The output returned shows the labels and their emorion score
-        for the provided text.
+    ''' Receives the text from the HTML interface and runs emotion detection
+        using emotion_detector(). Returns emotion scores or an error message.
     '''
     # Retrieve the text to analyze from the request arguments
-    # 'textToAnalyze' is defined in the JS file mywebscript.js
     text_to_analyze = request.args.get('textToAnalyze')
 
     # Pass the text to the emotion_detector function and store the response
     response = emotion_detector(text_to_analyze)
 
-    # Error handling:
-    # case where response.status_code == 400 (Bad Request) and 'dominant_emotion' is None
-    '''if response.get("status_code") == 400 or response.get("dominant_emotion") is None:
-        return {
-            "anger": None,
-            "disgust": None,
-            "fear": None,
-            "joy": None,
-            "sadness": None,
-            "dominant_emotion": None,
-            "error": "Invalid text! Please try again!"
-        }, 400'''
+    # Debugging: Print response to ensure correct handling
+    print("DEBUG: Response received:", response)
 
+    # If response is empty (API returned 400) or dominant_emotion is None, return error message
     if not response or response.get("dominant_emotion") is None:
-        return {"error": "Invalid text! Please try again!"}, 400
+        print("DEBUG: Returning Invalid Text message")  # Debugging
+        return jsonify({"error": "Invalid text! Please try again!"}), 400
 
     # Extract the label and score from the response
     anger = response.get('anger')
@@ -45,20 +35,19 @@ def emotion_analyzer():
     sadness = response.get('sadness')
     dominant_emotion = response.get('dominant_emotion')
 
-    # Return a formatted string with the sentiment label and score
-    return (f"For the given statement, the system response is:\n"
-     f"'anger': {anger}, 'disgust': {disgust}, 'fear': {fear},\n"
-     f"'joy': {joy} and 'sadness': {sadness},\n"
-     f"The dominant emotion is {dominant_emotion}.")
+    # Return a formatted response
+    return (
+        f"For the given statement, the system response is:\n"
+        f"'anger': {anger}, 'disgust': {disgust}, 'fear': {fear},\n"
+        f"'joy': {joy} and 'sadness': {sadness},\n"
+        f"The dominant emotion is {dominant_emotion}."
+    )
 
-#Main route to port 5000
+# Main route to port 5000
 @app.route("/")
 def render_index_page():
-    ''' This function initiates the rendering of the main application
-        page over the Flask channel
-        It simply runs the render_template function on the HTML template, index.html
-    '''
+    ''' Renders the main application page '''
     return render_template('index.html')
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug= False)
+    app.run(host="0.0.0.0", port=5000, debug=True)
