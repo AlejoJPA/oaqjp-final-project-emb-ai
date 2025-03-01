@@ -34,7 +34,10 @@ def emotion_analyzer():
         return {"error": "Emotion detection failed. Please try again with different input."}, 500
 
     # Return a formatted string with the sentiment label and score
-    return f"For the given statement, the system response is 'anger': {anger}, 'disgust': {disgust}, 'fear': {fear}, 'joy': {joy} and 'sadness': {sadness}. The dominant emotion is {dominant_emotion}. "
+    return (f"For the given statement, the system response is:\n"
+     f"'anger': {anger}, 'disgust': {disgust}, 'fear': {fear},\n"
+     f"'joy': {joy} and 'sadness': {sadness},\n"
+     f"The dominant emotion is {dominant_emotion}.")
 
 #Main route to port 5000
 @app.route("/")
